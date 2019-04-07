@@ -1,4 +1,8 @@
 import json
+import sys
+
+#ToDos
+#   1. Make the user communication as good as you can.
 
 def loadSetupData():
     with open('gc_setup.json') as data_file:
@@ -8,12 +12,13 @@ def loadSetupData():
     return grades
 
 def loadUserGradesData():
-    if loadUserGradesData =! gc_grades.json
-    with write('gc_grades.json') as data_file:
-        user_data  = json.load(data_file)
-    else:
+    #ToDo: Check if the file exists
     with open('gc_grades.json') as data_file:
         user_data  = json.load(data_file)
+        if (user_data):
+            print("File exists")
+        else :
+            print("file does not exist")
 
     return user_data
 
@@ -23,18 +28,25 @@ def askForAssignmentMarks(grades, current_grades):
 
     for key in grades:
         print("\nPercent for", key, "is", grades[key])
-        if ("key" not in current_grades.keys()):
-        print("\nYour grade for", key, "is", current_grades["mygrades"][key]
+
+        if  current_grades["mygrades"] == {} :
+            print("Your File is empty")
+
+        # ToDo: Handle the case when the file was empty (forst tiem user)
+        print("\nYour grade for", key, "is", current_grades["mygrades"][key])
         if (float(current_grades["mygrades"][key]) > -1):
             update = input("Do you want to change? ")
             if (update == "no"):
                 continue
         # ToDo: Handle the case when the user types a text instead of a number
         # ToDo: Handle the case when the user types a non-valid number ( >100 or other incorrect numbers)
-        while current_grades["mygrades"][key] >100:
-        print ("Please, insert a valid number")
         current_grades["mygrades"][key] = input("What is your Current Grade for: " + key + " . Please insert -1 if you don't have a grade yet")
-
+        if (current_grades["mygrades"][key].isalpha()):
+            print("invalid input")
+            sys.exit()
+        elif (current_grades["mygrades"][key]> 100):
+            print("The number is larger than 100")
+            sys.exit()
     return current_grades
 
 def saveGrades(current_grades):
@@ -47,7 +59,10 @@ def printCurrentGrade(grades, current_grades):
     curr_grade = 0
     # ToDo: Handle the case when the file was empty (forst tiem user)
     for key in current_grades["mygrades"]:
-        if current_grades["mygrades"][key] != -1:
+        if  current_grades["mygrades"] == {} :
+            print("Your File is empty")
+
+        elif current_grades["mygrades"][key] != -1:
             calc_grade = int(current_grades["mygrades"][key]) * grades[key] / 100
             curr_grade = curr_grade + calc_grade
 

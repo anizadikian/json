@@ -1,11 +1,5 @@
 import json
 
-#ToDos
-#   1.Limit the grades
-#   2.Order the list
-#   3.Grade should be a number
-#   4.
-
 def loadSetupData():
     with open('gc_setup.json') as data_file:
         course = json.load(data_file)
@@ -13,11 +7,32 @@ def loadSetupData():
     grades = course["course_setup"]["grade_breakdown"]
     return grades
 
-def askForAssignmentMarks(grades):
-    current_grades = {"mygrades": {}}
+def loadUserGradesData():
+    if loadUserGradesData =! gc_grades.json
+    with write('gc_grades.json') as data_file:
+        user_data  = json.load(data_file)
+    else:
+    with open('gc_grades.json') as data_file:
+        user_data  = json.load(data_file)
+
+    return user_data
+
+def askForAssignmentMarks(grades, current_grades):
+    if ("mygrades" not in current_grades.keys()) :
+        current_grades = {"mygrades": {}}
 
     for key in grades:
-        print(grades[key])
+        print("\nPercent for", key, "is", grades[key])
+        if ("key" not in current_grades.keys()):
+        print("\nYour grade for", key, "is", current_grades["mygrades"][key]
+        if (float(current_grades["mygrades"][key]) > -1):
+            update = input("Do you want to change? ")
+            if (update == "no"):
+                continue
+        # ToDo: Handle the case when the user types a text instead of a number
+        # ToDo: Handle the case when the user types a non-valid number ( >100 or other incorrect numbers)
+        while current_grades["mygrades"][key] >100:
+        print ("Please, insert a valid number")
         current_grades["mygrades"][key] = input("What is your Current Grade for: " + key + " . Please insert -1 if you don't have a grade yet")
 
     return current_grades
@@ -30,17 +45,20 @@ def saveGrades(current_grades):
 
 def printCurrentGrade(grades, current_grades):
     curr_grade = 0
+    # ToDo: Handle the case when the file was empty (forst tiem user)
     for key in current_grades["mygrades"]:
         if current_grades["mygrades"][key] != -1:
             calc_grade = int(current_grades["mygrades"][key]) * grades[key] / 100
             curr_grade = curr_grade + calc_grade
 
-    print (curr_grade)
+    print ("\nYour GPA is: ", curr_grade)
 
 def main():
-    grades = loadSetupData()
-    current_grades = askForAssignmentMarks(grades)
+    grades_setup = loadSetupData()
+    user_grades = loadUserGradesData()
+    printCurrentGrade(grades_setup, user_grades)
+    current_grades = askForAssignmentMarks(grades_setup, user_grades)
     saveGrades(current_grades)
-    printCurrentGrade(grades, current_grades)
+    printCurrentGrade(grades_setup, current_grades)
 
 main()
